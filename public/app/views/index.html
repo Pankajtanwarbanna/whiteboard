@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Logo -->
+    <link rel="shortcut icon" type="image/png" href="/assets/images/logo.png"/>
+
+
+    <title>Whiteboard App - A Web Whiteboard for realtime visual collaboration! </title>
+
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="assets/css/style.css"/>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- Angularjs File -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+
+    <!-- App config -->
+    <script src="app/app.js"></script>
+    <script src="app/routes.js"></script>
+
+    <!-- Angular Controller files -->
+    <script src="app/controllers/mainController.js"></script>
+
+    <!-- Angular Services -->
+    <script src="app/services/userServices.js"></script>
+    <script src="app/services/socketService.js"></script>
+
+    <!--Angular Directive -->
+    <script src="app/directive/whiteboardDirective.js"></script>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- Font library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="assets/css/normalize.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/tooltipster.css">
+    <script src="assets/js/vendor/modernizr-2.6.2.min.js"></script>
+
+</head>
+
+<body ng-app="userApp" ng-controller="mainController as main" ng-show="main.loadme" ng-cloak>
+
+    <main role="main" ng-if="main.home">
+        <div class="container d-flex flex-column jarallax" style="min-height: 46rem; background: url('https://getreplacer.com/images/bg/bg_06.svg') center center no-repeat;">
+
+
+            <div class="row">
+                <div class="col-lg-5 col-md-12 col-sm-12 pt-16 pt-lg-6 my-auto" data-aos="fade">
+                    <h1 class="display-3 mb-2">Virtual Whiteboard <span id="typed"></span>
+                    </h1>
+                    <p class="lead mb-4">A Web Whiteboard is a touch-friendly online whiteboard app that makes drawing, collaboration and sharing easy.</p>
+                    <div class="input-group mb-3">
+                        <input class="form-control rounded mx-0" type="text" placeholder="Enter your name..." aria-label="Email" ng-model="main.userName">
+                        <button ng-click="main.create()" class="btn btn-success" type="button">Start Drawing!</button>
+                        <br>
+                    </div>
+                    <div class="mb-3 small text-danger" ng-if="main.homeScreenErrorMsg"> {{ main.homeScreenErrorMsg }}.</div>
+
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 ml-auto my-auto" data-aos="fade-left"><img class="w-100" alt="Illustration" src="/assets/images/home.png"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="ng-view" ng-if="!main.home"></div>
+    <main role="main" class="container" ng-if="main.home">
+            <footer class="page-footer font-small blue mt-5">
+
+            <!-- Copyright -->
+            <div class="footer-copyright text-center py-3"> Made with <i class="text-danger fa fa-heart"></i> by
+                Surya Marella (stm22)
+            </div>
+            <!-- Copyright -->
+
+        </footer>
+        <!-- Footer -->
+</main>
+    <!-- Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+
+    <script src="assets/js/plugins.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.18/paper-full.min.js"></script>
+
+    <!--Socket -->
+    <script src="https://simple-socket-app.herokuapp.com/lib/socket.io-client/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://simple-socket-app.herokuapp.com/lib/angular-socket-io/socket.min.js"></script>
+
+    <script src="assets/js/vendor/jquery.tooltipster.min.js"></script>
+
+</body>
+
+</html>

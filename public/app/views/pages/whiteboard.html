@@ -1,0 +1,276 @@
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">White Board.</a>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Welcome to the white board, {{ whiteboard.userName.toUpperCase() }}." aria-label="Search" disabled>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" ng-click="disconnect()" href="#">
+                <i class="fa fa-power-off text-danger" style="font-size: 35px;"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active text-muted" href="#">
+                            DRAWING
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"  ng-click="clearPage()">
+                            <i class="fa fa-file" style="margin-right: 10px;"></i>
+                            New Board
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" ng-class="{ active: pencilTool }" ng-click="changeTool('pencilTool')">
+                            <i class="fa fa-pencil" style="margin-right: 10px;"></i>
+                            Pencil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"  ng-class="{ active: eraserTool }" ng-click="changeTool('eraserTool')">
+                            <i class="fa fa-eraser" style="margin-right: 10px;"></i>
+                            Eraser
+                        </a>
+                    </li>
+                    <li class="nav-item" >
+                        <a class="nav-link" href="#" ng-class="{ active: textTool }" ng-click="changeTool('textTool')">
+                            <i class="fa fa-text-height" style="margin-right: 10px;"></i>
+                            Text
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active text-muted" href="#">
+                            STYLING
+                        </a>
+                    </li>
+
+                    <!-- Color Select -->
+                    <select class=" custom-select" style="margin-bottom: 15px;" ng-model="color" ng-change="changeColor(color)">
+                        <option value="colorOne">
+                            BLACK
+                        </option>
+                        <option value="colorTwo">BLUE</option>
+                        <option value="colorThree">RED</option>
+                        <option value="colorFour">GREEN</option>
+                        <option value="colorFive">YELLOW</option>
+                        <option value="colorSix">GREY</option>
+                        <option value="colorSeven">MAGENTA</option>
+                    </select>
+
+                    <!-- Size Select -->
+                    <select class=" custom-select" style="margin-bottom: 15px;" ng-model="size" ng-change="changePenSize(size)">
+                        <option value="finePen">Very Small</option>
+                        <option value="thinPen">Small</option>
+                        <option value="mediumPen">Medium</option>
+                        <option value="thickPen">Bold</option>
+                    </select>
+                </ul>
+
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active text-muted" href="#">
+                            MANAGE
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-target="#permission-dialog" data-toggle="modal" href="#">
+                            <i class="fa fa-user-secret" style="margin-right: 10px;"></i>
+                            Permissions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-target="#draw-request-dialog" data-toggle="modal" href="#">
+                            <i class="fa fa-registered" style="margin-right: 10px;"></i>
+                            Requests
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-target="#online-dialog" data-toggle="modal" href="#">
+                            <i class="fa fa-user" style="margin-right: 10px;"></i>
+                            {{ users.length }} Online
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+
+        <!-- Online Users Model -->
+        <div tabindex="-1" class="modal pmd-modal fade" id="online-dialog" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header pmd-modal-border">
+                        <h2 class="modal-title">{{ users.length }} Online Team Members</h2>
+                        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    </div>
+
+                    <ul class="list-group pmd-list pmd-modal-list pmd-list-avatar">
+                        <li class="list-group-item d-flex flex-row" ng-repeat="user in users">
+                            <a href="javascript:void(0);" class="pmd-avatar-list-img">
+                                <img alt="avatar-img" data-src="holder.js/40x40" class="img-fluid" style="height: 80px;width: 80px;" src="/assets/images/user.jpeg" data-holder-rendered="true">
+                            </a>
+                            <div class="media-body">
+                                <h3 class="pmd-list-title" style="margin-bottom: -10px;">&nbsp;&nbsp; <b>{{ user.name }}</b></h3>
+                                <p class="pmd-list-subtitle text-success">&nbsp;&nbsp; Active User</p>
+                            </div>
+                            <div class="custom-control custom-checkbox pmd-checkbox">
+                                <button ng-if="user.is_admin" class="btn pmd-ripple-effect btn-primary pmd-btn-flat" type="button">
+                                    OWNER
+                                </button>
+                                <button ng-if="user.isMod" class="btn pmd-ripple-effect btn-primary pmd-btn-flat" type="button">
+                                    MOD
+                                </button>
+                                <button ng-if="!user.is_admin && !user.isMod" class="btn pmd-ripple-effect btn-primary pmd-btn-flat" type="button">
+                                    MEMBER
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Permission Modal -->
+        <div tabindex="-1" class="modal pmd-modal fade" id="permission-dialog" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header pmd-modal-border">
+                        <h2 class="modal-title">Manage MOD Permissions</h2>
+                        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    </div>
+
+                    <ul class="list-group pmd-list pmd-modal-list pmd-list-avatar">
+
+                        <li class="list-group-item d-flex flex-row" ng-repeat="user in users">
+                            <a href="javascript:void(0);" class="pmd-avatar-list-img">
+                                <img alt="avatar-img" data-src="holder.js/40x40" class="img-fluid" style="height: 80px;width: 80px;" src="/assets/images/user.jpeg" data-holder-rendered="true">
+                            </a>
+                            <div class="media-body">
+                                <h3 class="pmd-list-title" style="margin-bottom: -10px;">&nbsp;&nbsp; <b>{{ user.name }}</b></h3>
+                                <p class="pmd-list-subtitle text-success">&nbsp;&nbsp; Active User</p>
+                            </div>
+                            <div class="custom-control custom-checkbox pmd-checkbox">
+                                <button ng-if="user.is_admin" class="btn pmd-ripple-effect btn-primary pmd-btn-flat" type="button">
+                                    ADMIN
+                                </button>
+                                <button ng-if="!user.is_admin && user.isMod" ng-click="whiteboard.removeMod(user.socket_id)" class="btn pmd-ripple-effect btn-danger pmd-btn-flat" type="button">
+                                    REMOVE MOD
+                                </button>
+                                <button ng-if="!user.is_admin && !user.isMod" ng-click="whiteboard.makeMod(user.socket_id)"  class="btn pmd-ripple-effect btn-success pmd-btn-flat" type="button">
+                                    MAKE MOD
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Draw Requests Modal -->
+        <div tabindex="-1" class="modal pmd-modal fade" id="draw-request-dialog" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header pmd-modal-border">
+                        <h2 class="modal-title">{{ drawRequests.length || 'No' }} Drawing Requests</h2>
+                        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                    </div>
+
+                    <ul class="list-group pmd-list pmd-modal-list pmd-list-avatar">
+                        <li class="list-group-item d-flex flex-row" ng-repeat="request in drawRequests">
+                            <a href="javascript:void(0);" class="pmd-avatar-list-img">
+                                <img alt="avatar-img" data-src="holder.js/40x40" class="img-fluid" style="height: 80px;width: 80px;" src="/assets/images/user.jpeg" data-holder-rendered="true">
+                            </a>
+                            <div class="media-body">
+                                <h3 class="pmd-list-title" style="margin-bottom: -10px;">&nbsp;&nbsp; <b>{{ request.name }}</b></h3>
+                                <p class="pmd-list-subtitle">&nbsp;&nbsp; Front End Developer</p>
+                            </div>
+                            <div class="custom-control custom-checkbox pmd-checkbox">
+                                <button ng-if="!request.approved" class="btn pmd-ripple-effect btn-success pmd-btn-flat" type="button" ng-click="whiteboard.allowDrawing(request.socket_id)">
+                                    ALLOW
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                                <button ng-if="request.approved" class="btn pmd-ripple-effect btn-danger pmd-btn-flat" type="button" ng-click="whiteboard.stopDrawing(request.socket_id)">
+                                    STOP
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Start drawing...</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button class="btn btn-sm btn-outline-secondary" ng-click="createShareLink()">
+                        Share now
+                        <i class="fa fa-share-alt"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="container-overview mt-5" ng-show="!whiteboard.userNameAvailable">
+                <div class="row">
+                    <div class="col-md-2"></div>
+
+                    <div class="col-md-8 text-center">
+                        <div class="card mb-4 box-shadow match">
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label>Enter your name:</label>
+                                        <input type="text" class="form-control" placeholder="Enter name" ng-model="whiteboard.userName">
+                                    </div>
+                                    <div class="alert alert-danger" ng-if="whiteboard.whiteboardErrorMsg">
+                                        <strong>Oops!</strong> {{ whiteboard.whiteboardErrorMsg }}.
+                                    </div>
+                                    <button ng-click="whiteboard.joinNow()" type="button" class="btn btn-sm btn-success">
+                                        Join&nbsp;<i class="fa fa-login"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+
+            <!-- Permission Error Message Message -->
+            <div class="alert alert-danger text-center" ng-show="drawPermissionDeniedMessage">
+                <strong>You don't have draw permission!</strong>
+                <button ng-click="whiteboard.requestDraw()" type="button" class="btn btn-sm btn-primary">
+                    Request Now&nbsp;
+                </button>
+            </div>
+
+            <!--Permission Success Message Message-->
+            <div class="alert alert-success text-center" ng-show="drawPermissionApproveMessage">
+                <strong>You have draw permission now!</strong>
+            </div>
+
+            <!-- Canvas -->
+            <div class="card box-shadow">
+                <div class="card-body">
+                    <canvas whiteboard class="board my-4" id="myCanvas" style="width: 100%;height: 100%"></canvas>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    $('.tooltip').tooltipster({
+        trigger: 'click'
+    });
+
+</script>
